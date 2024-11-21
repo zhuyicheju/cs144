@@ -2,6 +2,7 @@
 
 #include <cstdlib>
 #include <iostream>
+#include <sstream>
 #include <span>
 #include <string>
 
@@ -9,8 +10,24 @@ using namespace std;
 
 void get_URL( const string& host, const string& path )
 {
-  cerr << "Function called: get_URL(" << host << ", " << path << ")\n";
-  cerr << "Warning: get_URL() has not been implemented yet.\n";
+  TCPSocket socket = TCPSocket();
+  socket.connect(Address(host, "http"));
+  std::ostringstream oss;
+  oss << "GET " << path << " HTTP/1.1\r\n"
+      << "Host: " << host << "\r\n"
+      << "Connection: close\r\n"
+      << "\r\n";
+  socket.write(string_view(oss.str()));
+
+  std::string recv;
+  while(!socket.eof()){
+    socket.read(recv);
+    cout<<recv;
+  }
+
+
+  // cerr << "Function called: get_URL(" << host << ", " << path << ")\n";
+  // cerr << "Warning: get_URL() has not been implemented yet.\n";
 }
 
 int main( int argc, char* argv[] )
