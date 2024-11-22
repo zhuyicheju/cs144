@@ -57,7 +57,7 @@ void Writer::close()
 
 uint64_t Writer::available_capacity() const
 {
-  return capacity_ - bytes_pushed();
+  return capacity_ - ((read_mirror == write_mirror) ? (write_pos - read_pos) : (capacity_ - (read_pos - write_pos)));
 }
 
 uint64_t Writer::bytes_pushed() const
@@ -77,7 +77,7 @@ uint64_t Reader::bytes_popped() const
 
 string_view Reader::peek() const
 {
-  return string_view(string(1, buffer[read_pos]));
+  return string_view(&buffer[read_pos], 1);
 }
 
 void Reader::pop( uint64_t len )
