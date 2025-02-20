@@ -22,6 +22,7 @@ void Reassembler::insert( uint64_t first_index, string data, bool is_last_substr
     close_index_ = first_index + data.length();
     if(close_index_ == 0 || close_index_ == current_index_){
       output_.writer().close();
+      return;
     }
   }
   
@@ -46,17 +47,20 @@ void Reassembler::insert( uint64_t first_index, string data, bool is_last_substr
     iter++;
   }
 
-  std::vector<uint64_t> remove_list;
-  while(iter != buffer_.end() && iter->first < first_index + data.length()){
-    if(iter->first + iter->second.length() < first_index + data.length()){
-      remove_list.push_back(iter->first);
-    }else{
-      length -= first_index + length - iter->first;
-    } 
-    iter++; 
-  }
-  for(auto key : remove_list){
-    buffer_.erase(key);
+  if(length > 0){
+    std::vector<uint64_t> remove_list;
+    while(iter != buffer_.end() && iter->first < first_index + length){
+      if(iter->first + iter->second.length() < first_index + length){
+                                                            //here is the last bug, former is data.length()
+        remove_list.push_back(iter->first);
+      }else{
+        length -= first_index + length - iter->first;
+      } 
+      iter++; 
+    }
+    for(auto key : remove_list){
+      buffer_.erase(key);
+    }
   }
 
   uint64_t last_index = current_index_ + available_capacity();
