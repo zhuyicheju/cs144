@@ -8,7 +8,6 @@ ByteStream::ByteStream( uint64_t capacity ) : capacity_( capacity ), buffer(),
 
 bool Writer::is_closed() const
 {
-  //
   return closed;
 }
 void Writer::push( string data )

@@ -1,12 +1,16 @@
 #pragma once
 
 #include "byte_stream.hh"
+#include <cstdint>
+#include <string>
+#include <unordered_map>
+#include <map>
 
 class Reassembler
 {
 public:
   // Construct Reassembler to write into given ByteStream.
-  explicit Reassembler( ByteStream&& output ) : output_( std::move( output ) ) {}
+  explicit Reassembler( ByteStream&& output );
 
   /*
    * Insert a new substring to be reassembled into a ByteStream.
@@ -43,4 +47,11 @@ public:
 
 private:
   ByteStream output_;
+  //bool ready_; // the available capacity is full and data is ready to be sent;
+  uint64_t available_capacity() {return output_.writer().available_capacity();}
+  void push(std::string data) {output_.writer().push(data);}
+  std::map<uint64_t, std::string> buffer_;
+  uint64_t current_index_;
+  uint64_t buffer_size_;
+  uint64_t close_index_;
 };
