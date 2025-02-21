@@ -72,13 +72,12 @@ void Reassembler::insert( uint64_t first_index, string data, bool is_last_substr
 
   bool close_flag = false;
   while(1){
-    std::string cur;
-    if(!buffer_.empty() && buffer_.begin()->first == current_index_){
-      cur = move( buffer_.begin()->second );
-      buffer_.erase(buffer_.begin());
-    }else{
+    if(!(!buffer_.empty() && buffer_.begin()->first == current_index_)){
       break;
     }
+    std::string cur;
+    cur = move( buffer_.begin()->second );
+    buffer_.erase(buffer_.begin());
     uint64_t len = cur.length();
     if(length + current_index_ >= close_index_){
       close_flag = true;
