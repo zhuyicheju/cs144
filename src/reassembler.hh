@@ -1,6 +1,7 @@
 #pragma once
 
 #include "byte_stream.hh"
+#include "wrapping_integers.hh"
 #include <cstdint>
 #include <string>
 #include <unordered_map>
