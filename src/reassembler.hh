@@ -48,6 +48,8 @@ public:
   // Access output stream writer, but const-only (can't write from outside)
   const Writer& writer() const { return output_.writer(); }
 
+  void set_error() {this->output_.set_error();}
+
 private:
   ByteStream output_;
   //bool ready_; // the available capacity is full and data is ready to be sent;

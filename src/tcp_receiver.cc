@@ -32,6 +32,10 @@ void TCPReceiver::receive( TCPSenderMessage message )
     fin_sequo_ = message.seqno + (message.sequence_length() - 1);
   }
 
+  if(message.RST){
+    this->reassembler_.set_error();
+  }
+
   message.seqno.unwrap(zero_point_, check_point_);
   check_point_ += message.sequence_length();
   reassembler.insert(first_index, message.payload, 0);
