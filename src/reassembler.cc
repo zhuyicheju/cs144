@@ -19,6 +19,7 @@ Reassembler::Reassembler( ByteStream&& output ) : output_( std::move( output ) )
 void Reassembler::insert( uint64_t first_index, string data, bool is_last_substring )
 {
   if(is_last_substring){
+    cout<<"insert"<<first_index<<" "<<data.length()<<endl;
     close_index_ = first_index + data.length();
     if(close_index_ == 0 || close_index_ == current_index_){
       output_.writer().close();
